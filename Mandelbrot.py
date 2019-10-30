@@ -1,10 +1,9 @@
 import numpy as np
 import matplotlib.pyplot as plt
-import matplotlib.animation as animation
 from math import sqrt
 
-def madelbrot(x, y, max_step):
-    c = complex(x, y)
+def mandelbrot(re, im, max_step):
+    c = complex(re, im)
     z = 0
     for step in range(0, max_step):
         if (abs(z) > 2):
@@ -12,16 +11,18 @@ def madelbrot(x, y, max_step):
         z = z * z + c
     return max_step
 
+def pixels(pixel, max_step):
+    pixels_N = np.zeros([pixel, pixel])
+    # Default: [-1, 1, -2, 1]
+    for row, im in enumerate(np.linspace(-1, 1, num=pixel)):
+        for column, re in enumerate(np.linspace(-2, 1, num=pixel)):
+            pixels_N[row, column] = madelbrot(re, im, max_step)
+    return pixels_N
+
 pixel = 500
-pixels_N = np.zeros([pixel, pixel])
+max_step = 100
 
-# Default: [-1, 1, -2, 1]
-for row, y in enumerate(np.linspace(-1, 1, num=pixel)):
-    for column, x in enumerate(np.linspace(-2, 1, num=pixel)):
-        pixels_N[row, column] = madelbrot(x, y, max_step=100)
-
-plt.figure(dpi=100)
-plt.imshow(pixels_N, cmap="binary_r", interpolation="bilinear", extent=[-2, 1, -1, 1])
+plt.imshow(pixels(pixel, max_step), cmap="binary_r", interpolation="bilinear", extent=[-2, 1, -1, 1])
 plt.title("Mandelbrot set")
 plt.ylabel("Imaginary")
 plt.xlabel("Real")
