@@ -1,6 +1,9 @@
 #0.1100, 0.1104
 #-0.7460, -0.7465
 
+#0.110002, 0.110004
+#-0.746000, -0.746003
+
 import numpy as np
 import matplotlib.pyplot as plt
 from math import sqrt
