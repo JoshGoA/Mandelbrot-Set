@@ -11,7 +11,7 @@ def mandelbrot(re, im, max_step):
         z = z * z + c
     return max_step
 
-def pixels(pixel, max_step):
+def mandelbrot_set(pixel, max_step):
     pixels_N = np.zeros([pixel, pixel])
     # Default: [-1, 1, -2, 1]
     for row, im in enumerate(np.linspace(-1, 1, num=pixel)):
