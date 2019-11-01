@@ -6,31 +6,32 @@
 
 import numpy as np
 import matplotlib.pyplot as plt
-from math import sqrt
+from numba import jit
 
-def mandelbrot(re, im, max_step):
+@jit(nopython=True)
+def mandelbrot(re, im, max_i):
     c = complex(re, im)
     z = 0
-    for step in range(0, max_step):
+    for i in range(0, max_i):
         if (abs(z) > 2):
-            return step
+            return i
         z = z * z + c
-    return max_step
+    return max_i
 
-def mandelbrot_set(pixel, max_step):
-    pixels_N = np.zeros([pixel, pixel])
-    # Default: [-1, 1, -2, 1]
-    for row, im in enumerate(np.linspace(-1, 1, num=pixel)):
-        for column, re in enumerate(np.linspace(-2, 1, num=pixel)):
-            pixels_N[row, column] = madelbrot(re, im, max_step)
+def mandelbrotSet(miny, maxy, minx, maxx, pixels, max_i):
+    pixels_N = np.empty([pixels, pixels])
+    for row, im in enumerate(np.linspace(miny, maxy, pixels)):
+        for column, re in enumerate(np.linspace(minx, maxx, pixels)):
+            pixels_N[row, column] = mandelbrot(re, im, max_i)
     return pixels_N
 
-pixel = 500
-max_step = 100
+def image(miny, maxy, minx, maxx, pixels, max_i):
+    pixels_N = mandelbrotSet(miny, maxy, minx, maxx, pixels, max_i)
+    plt.imshow(pixels_N, cmap="binary_r", interpolation="sinc", extent=[minx, maxx, miny, maxy])
+    plt.title("Mandelbrot set")
+    plt.ylabel("Imaginary")
+    plt.xlabel("Real")
 
-plt.imshow(pixels(pixel, max_step), cmap="binary_r", interpolation="bilinear", extent=[-2, 1, -1, 1])
-plt.title("Mandelbrot set")
-plt.ylabel("Imaginary")
-plt.xlabel("Real")
-
+# Default: miny=-1, maxy=1, minx=-2, maxx=1, pixels=500, max_i=100
+image(miny=-1, maxy=1, minx=-2, maxx=1, pixels=500, max_i=100)
 plt.show()
