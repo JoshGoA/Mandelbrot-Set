@@ -1,7 +1,8 @@
-import numpy as np
-import matplotlib.pyplot as plt
 import matplotlib.animation as animation
+import matplotlib.pyplot as plt
+import numpy as np
 from numba import jit
+
 
 # Calculate mandelbrot set numbers
 @jit(nopython=True)
@@ -24,18 +25,20 @@ def mandelbrotSet(miny, maxy, minx, maxx, pixels, max_i):
 
 # Run animation
 def run_animation():
-
     anim_running = True
 
-    # Stop animation
+    # Click event
     def onClick(event):
+        # Restart animation
         if event.dblclick:
             anim.frame_seq = anim.new_frame_seq()
         else:
             nonlocal anim_running
+            # Pause animation
             if anim_running:
                 anim.event_source.stop()
                 anim_running = False
+            # Unpause animation
             else:
                 anim.event_source.start()
                 anim_running = True
@@ -61,7 +64,6 @@ def run_animation():
 
     # Connect fig to click
     fig.canvas.mpl_connect('button_press_event', onClick)
-
     # Repeat animation
     anim = animation.FuncAnimation(fig, func)
 
