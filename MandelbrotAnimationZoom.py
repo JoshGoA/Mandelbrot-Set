@@ -79,5 +79,6 @@ print("Pause---[click] ")
 print("Restart-[dblclick] ")
 
 # Show
-run_animation(y=0.2014296112433656, x= -0.8115312340458353, zoom=2, pixels=500, max_i=100)
+# Zooms: http://www.cuug.ab.ca/dewara/mandelbrot/images.html
+run_animation(y=-0.0005679790528465, x= 0.2549870375144766, zoom=2, pixels=500, max_i=100)
 plt.show()
