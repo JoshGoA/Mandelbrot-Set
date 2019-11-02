@@ -1,9 +1,11 @@
 import matplotlib.pyplot as plt
 import numpy as np
 from numba import jit
+import math
 
 
-# Calculate mandelbrot set numbers
+# * Mandelbrot set: https://en.wikipedia.org/wiki/Mandelbrot_set
+# Mandelbrot set sequence
 @jit(nopython=True)
 def mandelbrot(re, im, max_i):
     c = complex(re, im)
@@ -14,7 +16,7 @@ def mandelbrot(re, im, max_i):
         z = z * z + c
     return max_i
 
-# Arrange each number value in array
+# Arrange pixels in array
 def mandelbrotSet(y, x, zoom, pixels, max_i):
     pixels_N = np.empty([pixels, pixels])
     for row, im in enumerate(np.linspace(y-zoom, y+zoom, pixels)):
@@ -22,13 +24,15 @@ def mandelbrotSet(y, x, zoom, pixels, max_i):
             pixels_N[row, column] = mandelbrot(re, im, max_i)
     return pixels_N
 
-# Display mandelbrot set
+# Mandelbrot set display
 def image(y, x, zoom, pixels, max_i):
     # Figure size
     plt.figure(figsize=(5.5, 5))
     # Style and layout
     plt.style.use("seaborn")
     plt.tight_layout()
+    # Remove grid
+    plt.grid(b=False)
     # Image
     pixels_N = mandelbrotSet(y, x, zoom, pixels, max_i)
     plt.imshow(pixels_N, cmap="binary_r", interpolation="sinc", extent=[x-zoom, x+zoom, y-zoom, y+zoom])
@@ -36,10 +40,8 @@ def image(y, x, zoom, pixels, max_i):
     plt.title("Mandelbrot set")
     plt.ylabel("Imaginary")
     plt.xlabel("Real")
-    # Remove grid
-    plt.grid(b=False)
     # Show
     plt.show()
 
 # Zooms: http://www.cuug.ab.ca/dewara/mandelbrot/images.html
-image(y=0.266, x=-0.925, zoom=0.032, pixels=500, max_i=1000)
+image(y=0.2014296112433656, x= -0.8115312340458353, zoom=0.0014, pixels=500, max_i=250)

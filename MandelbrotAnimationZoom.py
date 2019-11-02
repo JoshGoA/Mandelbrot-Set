@@ -17,15 +17,15 @@ def mandelbrot(re, im, max_i):
     return max_i
 
 # Arrange pixels in array
-def mandelbrotSet(miny, maxy, minx, maxx, pixels, max_i):
+def mandelbrotSet(y, x, zoom, pixels, max_i):
     pixels_N = np.empty([pixels, pixels])
-    for row, im in enumerate(np.linspace(miny, maxy, pixels)):
-        for column, re in enumerate(np.linspace(minx, maxx, pixels)):
+    for row, im in enumerate(np.linspace(y-zoom, y+zoom, pixels)):
+        for column, re in enumerate(np.linspace(x-zoom, x+zoom, pixels)):
             pixels_N[row, column] = mandelbrot(re, im, max_i)
     return pixels_N
 
 # Run animation
-def run_animation():
+def run_animation(y, x, zoom, pixels, max_i):
 
     anim_running = True
     # Click event
@@ -46,6 +46,12 @@ def run_animation():
 
     # Mandelbrot set animation
     def func(i):
+        # Zoom level function
+        nonlocal zoom
+        zoom = zoom / 2
+        # Max iteration level function
+        nonlocal max_i
+        max_i = 1.1*max_i
         # Remove previous drawing
         plt.cla()
         # Style and layout
@@ -58,11 +64,10 @@ def run_animation():
         ax.set_ylabel("Imaginary")
         ax.set_xlabel("Real")
         # Image
-        # Default: miny=-1, maxy=1, minx=-2, maxx=1, pixels=500, max_i=i
-        pixels_N = mandelbrotSet(miny=-1, maxy=1, minx=-2, maxx=1, pixels=500, max_i=i)
-        ax.imshow(pixels_N, cmap="binary_r", interpolation="sinc", extent=[-2, 1, -1, 1])
+        pixels_N = mandelbrotSet(y=y, x= x, zoom=zoom, pixels=pixels, max_i=max_i)
+        ax.imshow(pixels_N, cmap="binary_r", interpolation="sinc", extent=[x-zoom, x+zoom, y-zoom, y+zoom])
 
-    # Repeat animation
+    # Repeat animations
     fig.canvas.mpl_connect('button_press_event', onClick)
     anim = animation.FuncAnimation(fig, func)
 
@@ -74,5 +79,5 @@ print("Pause---[click] ")
 print("Restart-[dblclick] ")
 
 # Show
-run_animation()
+run_animation(y=0.2014296112433656, x= -0.8115312340458353, zoom=2, pixels=500, max_i=100)
 plt.show()
